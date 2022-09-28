@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { ICompany } from "../interfaces/company.interface";
+import { ICompany, ICompanyAuth } from "../interfaces/company.interface";
 import authServices from "../services/authServices";
 
-export async function masterRegister(req: Request, res: Response) {
+export async function companyRegister(req: Request, res: Response) {
   const data: ICompany = res.locals.body;
   try {
     const result = await authServices.createCompany(data);
@@ -12,3 +12,16 @@ export async function masterRegister(req: Request, res: Response) {
     return res.status(500).send(error);
   }
 }
+
+export async function companyLogin(req: Request, res: Response) {
+  const data: ICompanyAuth = res.locals.body;
+  try {
+    const result = await authServices.companyLogin(data);
+    return res.status(200).send(result);
+  } catch (error: any) {
+    if (error.type === "unauthorized") return res.status(401).send(error.message);
+    if (error.type === "not_found") return res.status(404).send(error.message);
+    return res.status(500).send(error);
+  }
+}
+

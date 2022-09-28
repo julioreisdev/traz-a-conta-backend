@@ -17,8 +17,18 @@ model Companies {
   password String
   url String
   attendants Attendants[]
+  company_sessions CompanySessions[]
 
   @@map("companies")
+}
+
+model CompanySessions {
+  id Int @id @default(autoincrement())
+  token String @unique
+  user Companies @relation(fields: [userId], references: [id])
+  userId Int @unique
+
+  @@map("company_sessions")
 }
 
 model Attendants {
@@ -27,6 +37,16 @@ model Attendants {
   password String
   company Companies @relation(fields: [companyId], references: [id])
   companyId Int
+  attendant_sessions AttendantSessions[]
 
   @@map("attendants")
+}
+
+model AttendantSessions {
+  id Int @id @default(autoincrement())
+  token String @unique
+  user Attendants @relation(fields: [userId], references: [id])
+  userId Int @unique
+
+  @@map("attendant_sessions")
 }
