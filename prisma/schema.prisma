@@ -33,7 +33,7 @@ model CompanySessions {
 
 model Attendants {
   id Int @id @default(autoincrement())
-  name String
+  name String @unique
   password String
   company Companies @relation(fields: [companyId], references: [id])
   companyId Int
