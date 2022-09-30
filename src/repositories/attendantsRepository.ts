@@ -9,9 +9,14 @@ async function findByNameAndCompanyId(name: string, companyId: number) {
   return await connection.attendants.findMany({ where: { name, companyId } });
 }
 
+async function findByName(name: string) {
+  return await connection.attendants.findUnique({ where: { name } });
+}
+
 const attendantsRepository = {
   insert,
   findByNameAndCompanyId,
+  findByName,
 };
 
 export default attendantsRepository;

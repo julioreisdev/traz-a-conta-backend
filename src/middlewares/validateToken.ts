@@ -1,4 +1,6 @@
+import { CompanySessions } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
+import attendantSessionsRepository from "../repositories/attendantSessionsRepository";
 import companySessionsRepository from "../repositories/companySessionsRepository";
 
 export async function validateToken(
@@ -7,10 +9,21 @@ export async function validateToken(
   next: NextFunction
 ) {
   const token = req.headers.authorization?.replace("Bearer ", "");
-  const session = await companySessionsRepository.findByToken(`${token}`);
-  if (!session) {
+
+  const companySession: CompanySessions | null =
+    await companySessionsRepository.findByToken(`${token}`);
+
+  const attendantSession = await attendantSessionsRepository.findByToken(
+    `${token}`
+  );
+
+  if (companySession) {
+    res.locals.userId = companySession.userId;
+    next();
+  } else if (attendantSession) {
+    res.locals.userId = attendantSession.userId;
+    next();
+  } else {
     return res.sendStatus(401);
   }
-  res.locals.userId = session.userId;
-  next();
 }
