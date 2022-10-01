@@ -13,10 +13,15 @@ async function findById(id: number) {
   return await connection.tables.findUnique({ where: { id } });
 }
 
+async function findByCompayId(companyId: number) {
+  return await connection.tables.findMany({ where: { companyId } });
+}
+
 const tablesRepository = {
   insert,
   findDescriptionAndCompanyId,
   findById,
+  findByCompayId,
 };
 
 export default tablesRepository;

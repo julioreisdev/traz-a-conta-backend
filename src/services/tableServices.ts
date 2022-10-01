@@ -40,8 +40,36 @@ async function createTable(
   return { data, message: "Table created with successify!" };
 }
 
+async function getTables(data: { userId: number; token: string }) {
+  const attendant: AttendantSessions | null =
+    await attendantSessionsRepository.findByToken(data.token);
+
+  const company: Companies | null = await companiesRepository.findById(
+    data.userId
+  );
+
+  if (attendant) {
+    const allAboutAttendant: Attendants | null =
+      await attendantsRepository.findById(attendant.userId);
+    if (!allAboutAttendant) {
+      throw { type: "not_found", message: "Not Found" };
+    }
+    const tables: Tables[] | [] = await tablesRepository.findByCompayId(
+      allAboutAttendant?.companyId
+    );
+    return { tables };
+  }
+  if (company) {
+    const tables: Tables[] | [] = await tablesRepository.findByCompayId(
+      company?.id
+    );
+    return { tables };
+  }
+}
+
 const tableServices = {
   createTable,
+  getTables,
 };
 
 export default tableServices;
