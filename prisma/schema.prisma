@@ -19,6 +19,7 @@ model Companies {
   attendants Attendants[]
   company_sessions CompanySessions[]
   tables Tables[]
+  products Products[]
 
   @@map("companies")
 }
@@ -57,5 +58,27 @@ model Tables {
   description String
   company Companies @relation(fields: [companyId], references: [id])
   companyId Int
+  requests Requests[]
   @@map("tables")
+}
+
+model Products {
+  id Int @id @default(autoincrement())
+  name String
+  amount Decimal
+  company Companies @relation(fields: [companyId], references: [id])
+  companyId Int
+  requests Requests[]
+
+  @@map("products")
+}
+
+model Requests {
+  id Int @id @default(autoincrement())
+  table Tables @relation(fields: [tableId], references: [id])
+  tableId Int
+  product Products @relation(fields: [productId], references: [id])
+  productId Int
+  
+  @@map("requests")
 }
