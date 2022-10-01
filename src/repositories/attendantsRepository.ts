@@ -17,11 +17,16 @@ async function findById(id: number) {
   return await connection.attendants.findUnique({ where: { id } });
 }
 
+async function findByCompanyId(companyId: number) {
+  return await connection.attendants.findMany({ where: { companyId } });
+}
+
 const attendantsRepository = {
   insert,
   findByNameAndCompanyId,
   findByName,
   findById,
+  findByCompanyId,
 };
 
 export default attendantsRepository;
