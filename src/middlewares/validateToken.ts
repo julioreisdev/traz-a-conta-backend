@@ -19,9 +19,11 @@ export async function validateToken(
 
   if (companySession) {
     res.locals.userId = companySession.userId;
+    res.locals.token = companySession.token;
     next();
   } else if (attendantSession) {
     res.locals.userId = attendantSession.userId;
+    res.locals.token = attendantSession.token;
     next();
   } else {
     return res.sendStatus(401);

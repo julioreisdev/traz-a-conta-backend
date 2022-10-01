@@ -1,4 +1,4 @@
-import { Attendants, Companies } from "@prisma/client";
+import { Attendants, Companies, CompanySessions } from "@prisma/client";
 import { ICompany } from "../interfaces/company.interface";
 import companiesRepository from "../repositories/companiesRepository";
 import bcrypt from "bcrypt";
@@ -28,14 +28,22 @@ async function createCompany(data: ICompany) {
   };
 }
 
-async function companyAttendantRegister(data: IAttendant) {
+async function companyAttendantRegister(data: IAttendant, token: string) {
+  const companySession: CompanySessions | null =
+    await companySessionsRepository.findByToken(token);
+  if (!companySession) {
+    throw { type: "unauthorized", message: "Unauthorized" };
+  }
+
+  const attendantGeneralName: Attendants | null = await attendantsRepository.findByName(data.name)
+
   const attendant: Attendants[] | [] =
     await attendantsRepository.findByNameAndCompanyId(
       data.name,
       data.companyId
     );
 
-  if (attendant.length !== 0) {
+  if (attendant.length !== 0 || attendantGeneralName) {
     throw { type: "conflict", message: "Attendant already exist!" };
   }
 

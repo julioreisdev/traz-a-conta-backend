@@ -13,10 +13,15 @@ async function findByName(name: string) {
   return await connection.attendants.findUnique({ where: { name } });
 }
 
+async function findById(id: number) {
+  return await connection.attendants.findUnique({ where: { id } });
+}
+
 const attendantsRepository = {
   insert,
   findByNameAndCompanyId,
   findByName,
+  findById,
 };
 
 export default attendantsRepository;

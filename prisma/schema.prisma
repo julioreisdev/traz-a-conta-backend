@@ -18,6 +18,7 @@ model Companies {
   url String
   attendants Attendants[]
   company_sessions CompanySessions[]
+  tables Tables[]
 
   @@map("companies")
 }
@@ -49,4 +50,12 @@ model AttendantSessions {
   userId Int @unique
 
   @@map("attendant_sessions")
+}
+
+model Tables {
+  id Int @id @default(autoincrement())
+  description String
+  company Companies @relation(fields: [companyId], references: [id])
+  companyId Int
+  @@map("tables")
 }
