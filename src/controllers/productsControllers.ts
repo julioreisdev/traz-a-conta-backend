@@ -20,3 +20,16 @@ export async function createProduct(req: Request, res: Response) {
     return res.status(500).send(error);
   }
 }
+
+export async function getProducts(req: Request, res: Response) {
+  const userId: number = res.locals.userId;
+  const token: string = res.locals.token;
+  try {
+    const result = await productsServices.getProducts({ userId, token });
+    return res.status(201).send(result);
+  } catch (error: any) {
+    if (error.type === "unauthorized")
+      return res.status(401).send(error.message);
+    return res.status(500).send(error);
+  }
+}

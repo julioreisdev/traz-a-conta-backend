@@ -1,6 +1,12 @@
-import { AttendantSessions, Companies, Products } from "@prisma/client";
+import {
+  Attendants,
+  AttendantSessions,
+  Companies,
+  Products,
+} from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime";
 import attendantSessionsRepository from "../repositories/attendantSessionsRepository";
+import attendantsRepository from "../repositories/attendantsRepository";
 import companiesRepository from "../repositories/companiesRepository";
 import productsRepository from "../repositories/productsRepository";
 
@@ -36,8 +42,34 @@ async function createProduct(
   };
 }
 
+async function getProducts(data: { userId: number; token: string }) {
+  const attendant: AttendantSessions | null =
+    await attendantSessionsRepository.findByToken(data.token);
+
+  const company: Companies | null = await companiesRepository.findById(
+    data.userId
+  );
+
+  if (attendant) {
+    const allAboutAttendant: Attendants | null =
+      await attendantsRepository.findById(attendant.userId);
+    if (!allAboutAttendant) {
+      throw { type: "not_found", message: "Not Found" };
+    }
+    const products: Products[] | [] =
+      await productsRepository.findAllByCompanyId(allAboutAttendant.companyId);
+    return { products };
+  }
+  if (company) {
+    const products: Products[] | [] =
+      await productsRepository.findAllByCompanyId(company.id);
+    return { products };
+  }
+}
+
 const productsServices = {
   createProduct,
+  getProducts,
 };
 
 export default productsServices;
