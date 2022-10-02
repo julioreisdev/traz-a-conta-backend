@@ -10,14 +10,14 @@ describe("POST em /companies/register", () => {
       .send(company);
     expect(response.status).toBe(422);
   });
-  it("Retorna 201 ao cadastrar compania.", async () => {
+  it("Retorna 201 ao cadastrar company.", async () => {
     const company = await companyFactory.validSchema();
     const response = await supertest(app)
       .post("/companies/register")
       .send(company);
     expect(response.status).toBe(201);
   });
-  it("Retorna 409 ao tentar cadastrar companie já cadastrada.", async () => {
+  it("Retorna 409 ao tentar cadastrar company já cadastrada.", async () => {
     const company = await companyFactory.validSchema();
     await supertest(app).post("/companies/register").send(company);
     const response = await supertest(app)
