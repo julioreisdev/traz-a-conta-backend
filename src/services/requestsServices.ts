@@ -28,12 +28,32 @@ async function createRequest(data: Omit<Requests, "id">) {
     };
   }
 
-  await requestRepository.insert(data);
+  await requestRepository.insert({
+    ...data,
+    amount: product.amount,
+    productName: product.name,
+  });
   return { request: data, company: { name: company?.name, id: company?.id } };
+}
+
+async function findAllRequestsTables(id: number) {
+  const requests: Requests[] | [] = await requestRepository.findAllByTableId(
+    id
+  );
+  if (requests.length === 0) {
+    throw { type: "not_found", message: "Request table not found" };
+  }
+  let balance = 0;
+  for (let i = 0; i < requests.length; i++) {
+    balance = balance + Number(requests[i].amount);
+  }
+
+  return { balance, requests };
 }
 
 const requestsServices = {
   createRequest,
+  findAllRequestsTables,
 };
 
 export default requestsServices;

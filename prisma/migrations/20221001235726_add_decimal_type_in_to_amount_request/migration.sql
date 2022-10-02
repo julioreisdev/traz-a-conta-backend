@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "requests" ALTER COLUMN "amount" SET DATA TYPE DECIMAL(65,30);

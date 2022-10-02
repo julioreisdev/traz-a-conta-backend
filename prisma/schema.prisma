@@ -77,6 +77,8 @@ model Requests {
   id Int @id @default(autoincrement())
   table Tables @relation(fields: [tableId], references: [id])
   tableId Int
+  amount Decimal
+  productName String
   product Products @relation(fields: [productId], references: [id])
   productId Int
   

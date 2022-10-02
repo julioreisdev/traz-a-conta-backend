@@ -12,3 +12,14 @@ export async function createRequest(req: Request, res: Response) {
     return res.status(500).send(error.message);
   }
 }
+
+export async function getTableRequestsById(req: Request, res: Response) {
+  const id: number = Number(req.params.tableId);
+  try {
+    const result = await requestsServices.findAllRequestsTables(id);
+    return res.status(200).send(result);
+  } catch (error: any) {
+    if (error.type === "not_found") return res.status(404).send(error.message);
+    return res.status(500).send(error);
+  }
+}

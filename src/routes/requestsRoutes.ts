@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createRequest } from "../controllers/requestControllers";
+import { createRequest, getTableRequestsById } from "../controllers/requestControllers";
 import validateSchema from "../middlewares/validateSchema";
 import { validateToken } from "../middlewares/validateToken";
 import requestSchema from "../schemas/requestSchema";
@@ -12,5 +12,7 @@ router.post(
   validateSchema(requestSchema),
   createRequest
 );
+
+router.get("/requests/:tableId", getTableRequestsById);
 
 export default router;
