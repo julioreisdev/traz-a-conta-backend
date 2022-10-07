@@ -1,0 +1,11 @@
+services:
+  node_tac:
+    container_name: node_tac
+    build: .
+    ports:
+      - 80:80
+    env_file:
+      - .env
+
+volumes:
+  pg_sorteador-db:
