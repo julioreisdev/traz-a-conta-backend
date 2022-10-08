@@ -11,9 +11,14 @@ async function findAllByTableId(tableId: number) {
    } });
 }
 
+async function deleteAllByTableId(tableId: number) {
+  return await connection.requests.deleteMany({where: {tableId}})
+}
+
 const requestRepository = {
   insert,
   findAllByTableId,
+  deleteAllByTableId
 };
 
 export default requestRepository;

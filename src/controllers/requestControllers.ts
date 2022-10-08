@@ -23,3 +23,14 @@ export async function getTableRequestsById(req: Request, res: Response) {
     return res.status(500).send(error);
   }
 }
+
+
+export async function deleteAllRequests(req: Request, res: Response) {
+  const tableId: number = Number(req.params.tableId);
+  try {
+    const result = await requestsServices.deleteAllByTableId(tableId);
+    return res.status(200).send(result);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+}

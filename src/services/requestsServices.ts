@@ -40,9 +40,6 @@ async function findAllRequestsTables(id: number) {
   const requests: Requests[] | [] = await requestRepository.findAllByTableId(
     id
   );
-  if (requests.length === 0) {
-    throw { type: "not_found", message: "Request table not found" };
-  }
   let balance = 0;
   for (let i = 0; i < requests.length; i++) {
     balance = balance + Number(requests[i].amount);
@@ -51,9 +48,15 @@ async function findAllRequestsTables(id: number) {
   return { balance, requests };
 }
 
+async function deleteAllByTableId(tableId: number) {
+  await requestRepository.deleteAllByTableId(tableId)
+  return {message: 'deleted'}
+}
+
 const requestsServices = {
   createRequest,
   findAllRequestsTables,
+  deleteAllByTableId
 };
 
 export default requestsServices;
