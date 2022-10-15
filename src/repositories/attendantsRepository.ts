@@ -17,6 +17,10 @@ async function findById(id: number) {
   return await connection.attendants.findUnique({ where: { id } });
 }
 
+async function deleteById(id: number) {
+  return await connection.attendants.delete({ where: { id } });
+}
+
 async function findByCompanyId(companyId: number) {
   return await connection.attendants.findMany({ where: { companyId } });
 }
@@ -27,6 +31,7 @@ const attendantsRepository = {
   findByName,
   findById,
   findByCompanyId,
+  deleteById
 };
 
 export default attendantsRepository;

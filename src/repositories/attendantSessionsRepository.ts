@@ -24,11 +24,18 @@ async function findByUserId(userId: number) {
   });
 }
 
+async function deleteByUserId(userId: number) {
+  return await connection.attendantSessions.delete({
+    where: { userId: userId },
+  });
+}
+
 const attendantSessionsRepository = {
   insert,
   update,
   findByToken,
-  findByUserId
+  findByUserId,
+  deleteByUserId
 };
 
 export default attendantSessionsRepository;
