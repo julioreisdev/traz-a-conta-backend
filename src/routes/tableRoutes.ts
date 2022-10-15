@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createTable, getTables } from "../controllers/tablesControllers";
+import { createTable, deleteTable, getTables } from "../controllers/tablesControllers";
 import validateSchema from "../middlewares/validateSchema";
 import { validateToken } from "../middlewares/validateToken";
 import tableSchema from "../schemas/tableSchema";
@@ -14,5 +14,7 @@ router.post(
 );
 
 router.get("/companies/tables", validateToken, getTables);
+
+router.delete("/companies/tables/:tableId", validateToken, deleteTable);
 
 export default router;

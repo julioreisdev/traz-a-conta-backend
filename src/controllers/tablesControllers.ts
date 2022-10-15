@@ -30,3 +30,16 @@ export async function getTables(req: Request, res: Response) {
     return res.status(500).send(error);
   }
 }
+
+export async function deleteTable(req: Request, res: Response) {
+  const userId: number = res.locals.userId;
+  const token: string = res.locals.token;
+  const tableId: number = Number(req.params.tableId);
+  try {
+    const result = await tableServices.deleteTable({ userId, token, tableId });
+    return res.status(200).send(result);
+  } catch (error: any) {
+    if (error.type === "not_found") return res.status(404).send(error.message);
+    return res.status(500).send(error);
+  }
+}

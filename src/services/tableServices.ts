@@ -67,9 +67,25 @@ async function getTables(data: { userId: number; token: string }) {
   }
 }
 
+async function deleteTable(data: {
+  userId: number;
+  token: string;
+  tableId: number;
+}) {
+  const table: Tables | null = await tablesRepository.findById(data.tableId);
+  if (!table) {
+    throw { type: "not_found", message: "Not Found" };
+  }
+
+  await tablesRepository.deleteById(data.tableId);
+
+  return { message: "Table deleted successify" };
+}
+
 const tableServices = {
   createTable,
   getTables,
+  deleteTable,
 };
 
 export default tableServices;
