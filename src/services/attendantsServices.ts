@@ -21,7 +21,7 @@ async function getAttendants(data: { userId: number; token: string }) {
     throw { type: "unauthorized", message: "Unauthorized" };
   }
 
-  const attendants: Omit<Attendants, "password">[] | [] =
+  const attendants: Attendants[] | [] =
     await attendantsRepository.findByCompanyId(company.id);
 
   return { attendants };

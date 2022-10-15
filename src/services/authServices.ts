@@ -35,7 +35,8 @@ async function companyAttendantRegister(data: IAttendant, token: string) {
     throw { type: "unauthorized", message: "Unauthorized" };
   }
 
-  const attendantGeneralName: Attendants | null = await attendantsRepository.findByName(data.name)
+  const attendantGeneralName: Attendants | null =
+    await attendantsRepository.findByName(data.name);
 
   const attendant: Attendants[] | [] =
     await attendantsRepository.findByNameAndCompanyId(
@@ -47,10 +48,7 @@ async function companyAttendantRegister(data: IAttendant, token: string) {
     throw { type: "conflict", message: "Attendant already exist!" };
   }
 
-  await attendantsRepository.insert({
-    ...data,
-    password: bcrypt.hashSync(data.password, 10),
-  });
+  await attendantsRepository.insert(data);
   return {
     message: "Attendat created succesify!",
     data: { user: data.name, password: data.password },
