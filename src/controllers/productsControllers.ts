@@ -33,3 +33,22 @@ export async function getProducts(req: Request, res: Response) {
     return res.status(500).send(error);
   }
 }
+
+export async function deleteProduct(req: Request, res: Response) {
+  const userId: number = res.locals.userId;
+  const token: string = res.locals.token;
+  const productId: number = Number(req.params.productId);
+  try {
+    const result = await productsServices.deleteProduct(
+      userId,
+      token,
+      productId
+    );
+    return res.status(201).send(result);
+  } catch (error: any) {
+    if (error.type === "unauthorized")
+      return res.status(401).send(error.message);
+    if (error.type === "not_found") return res.status(404).send(error.message);
+    return res.status(500).send(error);
+  }
+}

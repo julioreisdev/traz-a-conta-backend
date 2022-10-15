@@ -6,19 +6,26 @@ async function insert(data: Omit<Requests, "id">) {
 }
 
 async function findAllByTableId(tableId: number) {
-  return await connection.requests.findMany({ where: { 
-    tableId
-   } });
+  return await connection.requests.findMany({
+    where: {
+      tableId,
+    },
+  });
+}
+
+async function deleteByProductId(productId: number) {
+  return await connection.requests.deleteMany({ where: { productId } });
 }
 
 async function deleteAllByTableId(tableId: number) {
-  return await connection.requests.deleteMany({where: {tableId}})
+  return await connection.requests.deleteMany({ where: { tableId } });
 }
 
 const requestRepository = {
   insert,
   findAllByTableId,
-  deleteAllByTableId
+  deleteAllByTableId,
+  deleteByProductId
 };
 
 export default requestRepository;

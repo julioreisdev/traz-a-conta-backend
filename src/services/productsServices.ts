@@ -9,6 +9,7 @@ import attendantSessionsRepository from "../repositories/attendantSessionsReposi
 import attendantsRepository from "../repositories/attendantsRepository";
 import companiesRepository from "../repositories/companiesRepository";
 import productsRepository from "../repositories/productsRepository";
+import requestRepository from "../repositories/requestsRepository";
 
 async function createProduct(
   data: { name: string; amount: Decimal; userId: number },
@@ -67,9 +68,31 @@ async function getProducts(data: { userId: number; token: string }) {
   }
 }
 
+async function deleteProduct(userId: number, token: string, productId: number) {
+  const attendant: AttendantSessions | null =
+    await attendantSessionsRepository.findByToken(token);
+  const company: Companies | null = await companiesRepository.findById(userId);
+  const product: Products | null = await productsRepository.findById(productId);
+
+  if (attendant || !company) {
+    throw { type: "unauthorized", message: "Unauthorized" };
+  }
+  if (!product) {
+    throw { type: "not_found", message: "Product not found" };
+  }
+
+  await requestRepository.deleteByProductId(productId);
+  await productsRepository.deleteById(productId);
+
+  return {
+    message: "Product deleted successify",
+  };
+}
+
 const productsServices = {
   createProduct,
   getProducts,
+  deleteProduct,
 };
 
 export default productsServices;
