@@ -79,7 +79,7 @@ async function loginService(data: ILogin) {
 
     return { is_master: true, token };
   } else if (attendant) {
-    if (!bcrypt.compareSync(data.password, attendant.password)) {
+    if (data.password !== attendant.password) {
       throw { type: "unauthorized", message: "" };
     }
     const session: ISession | null =
