@@ -1,6 +1,6 @@
 services:
   node_tac:
-    container_name: node_tac
+    container_name: node_tacv3
     build: .
     ports:
       - 80:4000
