@@ -77,7 +77,7 @@ async function loginService(data: ILogin) {
       ? await companySessionsRepository.update({ userId: company.id, token })
       : await companySessionsRepository.insert({ userId: company.id, token });
 
-    return { is_master: true, token };
+    return { is_master: true, token, company: company.name };
   } else if (attendant) {
     if (data.password !== attendant.password) {
       throw { type: "unauthorized", message: "" };
@@ -85,6 +85,7 @@ async function loginService(data: ILogin) {
     const session: ISession | null =
       await attendantSessionsRepository.findByUserId(attendant.id);
 
+    const company: Companies | null = await companiesRepository.findById(attendant.companyId)
     const token = uuid();
 
     session
@@ -96,7 +97,7 @@ async function loginService(data: ILogin) {
           userId: attendant.id,
           token,
         });
-    return { is_master: false, token };
+    return { is_master: false, token, company: company?.name };
   } else {
     throw { type: "not_found", message: "User not found" };
   }
